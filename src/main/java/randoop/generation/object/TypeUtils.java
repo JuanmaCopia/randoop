@@ -1,4 +1,4 @@
-package object;
+package randoop.generation.object;
 
 import java.util.HashSet;
 import java.util.Set;

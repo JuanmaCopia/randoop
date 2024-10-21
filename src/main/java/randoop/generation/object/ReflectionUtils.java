@@ -1,4 +1,4 @@
-package object;
+package randoop.generation.object;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

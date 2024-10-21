@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.StringJoiner;
+
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.StringsPlume;
@@ -14,6 +15,7 @@ import randoop.DummyVisitor;
 import randoop.Globals;
 import randoop.NormalExecution;
 import randoop.SubTypeSet;
+import randoop.generation.object.Store;
 import randoop.main.GenInputsAbstract;
 import randoop.main.RandoopBug;
 import randoop.operation.NonreceiverTerm;
@@ -50,7 +52,7 @@ public class ForwardGenerator extends AbstractGenerator {
    * discarded.
    *
    * <p>This must be ordered by insertion to allow for flaky test history collection in {@link
-   * randoop.main.GenTests#printSequenceExceptionError(AbstractGenerator, SequenceExceptionError)}.
+   * randoop.main.GenTests# printSequenceExceptionError(AbstractGenerator, SequenceExceptionError)}.
    */
   private final LinkedHashSet<Sequence> allSequences = new LinkedHashSet<>();
 
@@ -85,6 +87,9 @@ public class ForwardGenerator extends AbstractGenerator {
    * <p>Each value in the collection is a primitive wrapper or a String.
    */
   private Set<Object> runtimePrimitivesSeen = new LinkedHashSet<>();
+
+  // ADDED line:
+  private Store store = new Store();
 
   /**
    * Create a forward generator.
@@ -394,6 +399,23 @@ public class ForwardGenerator extends AbstractGenerator {
 
       Log.logPrintf("Making index " + i + " active.%n");
     }
+
+    // ====== Begin ADDED block ====== //
+
+    List<Variable> arguments = seq.sequence.getVariablesOfLastStatement();
+
+    for (Variable argument : arguments) {
+      int declIndex = argument.getDeclIndex();
+      if (seq.sequence.isActive(declIndex)) {
+        Object object = seq.getValue(declIndex);
+        if (store.add(object)) {
+          return;
+        }
+      }
+    }
+    seq.sequence.clearAllActiveFlags();
+
+    // ====== End ADDED block ====== //
   }
 
   /**

@@ -1,4 +1,4 @@
-package object;
+package randoop.generation.object;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -25,8 +25,8 @@ public class Hash {
         if (object == null) {
             hashList.add("null");
         } else if (TypeUtils.isPrimitiveWrapper(object)) {
-            hashList.add(getPrimitiveHash(object));
-            //hashList.add("Primitive");
+            //hashList.add(getPrimitiveHash(object));
+            hashList.add("Primitive");
         } else if (objToHash.containsKey(object)) {
             // Already hashed
             hashList.add(objToHash.get(object));
@@ -47,8 +47,8 @@ public class Hash {
 
     private static void hashArray(Object object, Map<Object, String> objToHash, List<String> hashList) {
         if (TypeUtils.isArrayOfPrimitiveType(object.getClass())) {
-            hashList.add(getPrimitiveHash(object));
-            //hashList.add("Primitive");
+            //hashList.add(getPrimitiveHash(object));
+            hashList.add("Primitive");
         } else { // is Array of Reference Type
             Object[] array = (Object[]) object;
             for (Object element : array) {
@@ -64,9 +64,9 @@ public class Hash {
         }
     }
 
-    private static String getPrimitiveHash(Object object) {
+/*    private static String getPrimitiveHash(Object object) {
         return object.toString();
         //return object.getClass().getSimpleName();
-    }
+    }*/
 
 }
